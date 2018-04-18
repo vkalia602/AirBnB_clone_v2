@@ -7,6 +7,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from models import city
 from os import getenv
+import models
 
 
 class State(BaseModel, Base):
@@ -25,7 +26,7 @@ class State(BaseModel, Base):
             '''
             Getter for cities
             '''
-            all_cities = models.storage.all(City)
+            all_cities = models.storage.all(models.classes["City"])
             cities = []
             for key, obj in all_cities.items():
                 if obj.state_id == self.id:
