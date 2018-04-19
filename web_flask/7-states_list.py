@@ -19,7 +19,8 @@ def render_states():
 
 
 @app.teardown_appcontext
-def close_dat_sess():
+def close_dat_sess(exception):
     storage.close()
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
