@@ -42,26 +42,27 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        '''
-        Method that creates a query and prints a dictionary of cls
+        '''queries on current database session
+        Function credit- Robert Malmstein
         '''
         import models
-        obj_dict = {}
+        class_list = []
         if cls is None:
-            for things in models.classes.values():
-                try:
-                    output = self.__session.query(things).all()
-                    for stuff in output:
-                        key = stuff.__class__.__name__ + '.' + stuff.id
-                        obj_dict[key] = stuff
-                except:
-                    continue
+            for key, value in models.classes.items():
+                class_list.append(value)
         else:
-            output = self.__session.query(models.classes[cls]).all()
-            for stuff in output:
-                key = stuff.__class__.__name__ + '.' + stuff.id
-                obj_dict[key] = stuff
-        return obj_dict
+            if cls in models.classes.values():
+                class_list = [cls]
+        new_dict = {}
+        for search in class_list:
+            try:
+                capture = self.__session.query(search).all()
+            except:
+                continue
+            for objects in capture:
+                key = str(objects.__class__.__name__) + '.' + objects.id
+                new_dict[key] = objects
+        return new_dict
 
     def new(self, obj):
         '''
